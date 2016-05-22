@@ -19,5 +19,5 @@ public final class Constants {
     public static final String RELEASE_DATE_KEY = "release_date";
     public static final String TITLE_KEY = "title";
     public static final String VOTE_AVERAGE_KEY = "vote_average";
-    
+
 }
