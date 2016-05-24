@@ -24,6 +24,7 @@ import com.christopherluc.popularmovies.BuildConfig;
 import com.christopherluc.popularmovies.R;
 import com.christopherluc.popularmovies.data.Constants;
 import com.christopherluc.popularmovies.data.Movie;
+import com.christopherluc.popularmovies.fragment.MovieDetailFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +48,7 @@ public class MovieListActivity extends AppCompatActivity implements SwipeRefresh
     private SwipeRefreshLayout mSwipeRefresh;
 
     private String mCurrentPath;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,9 @@ public class MovieListActivity extends AppCompatActivity implements SwipeRefresh
         mCurrentPath = savedInstanceState == null ? Constants.MOVIE_LIST_POPULAR_URL : savedInstanceState.getString(Constants.MOVIE_LIST_RATED_URL);
         if (savedInstanceState == null) {
             onRefresh();
+        }
+        if (findViewById(R.id.detail_layout) != null) {
+            mTwoPane = true;
         }
     }
 
@@ -130,6 +135,14 @@ public class MovieListActivity extends AppCompatActivity implements SwipeRefresh
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (mTwoPane) {
+                        MovieDetailFragment fragment = MovieDetailFragment.newInstance(movie);
+
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.detail_layout, fragment)
+                                .commit();
+                        return;
+                    }
                     Intent i = new Intent(MovieListActivity.this, MovieDetailActivity.class).putExtra(Constants.EXTRA_MOVIE, movie);
                     startActivity(i);
                 }
