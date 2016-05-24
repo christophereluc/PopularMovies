@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.christopherluc.popularmovies.BuildConfig;
 import com.christopherluc.popularmovies.R;
 import com.christopherluc.popularmovies.api.RetrieveMovies;
 import com.christopherluc.popularmovies.data.Constants;
@@ -76,7 +77,7 @@ public class MovieListActivity extends AppCompatActivity implements SwipeRefresh
     public void onRefresh() {
         mSwipeRefresh.setRefreshing(true);
         RetrieveMovies retrieveMovies = retrofit.create(RetrieveMovies.class);
-        Call<MovieListResponse> call = retrieveMovies.getMovies(mCurrentPath);
+        Call<MovieListResponse> call = retrieveMovies.getMovies(mCurrentPath, BuildConfig.MOVIE_DATABASE_KEY);
         call.enqueue(new Callback<MovieListResponse>() {
             @Override
             public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
