@@ -4,4 +4,6 @@
     <string name="most_popular">Most Popular</string>
     <string name="rating_text">%s/10</string>
     <string name="cd_poster">poster image</string>
+    <string name="author_says">%s says:</string>
+    <string name="trailer_number">Trailer %s</string>
 </resources>

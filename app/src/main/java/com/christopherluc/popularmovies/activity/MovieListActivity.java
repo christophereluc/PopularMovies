@@ -20,7 +20,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.christopherluc.popularmovies.BuildConfig;
 import com.christopherluc.popularmovies.R;
-import com.christopherluc.popularmovies.api.RetrieveMovies;
+import com.christopherluc.popularmovies.api.ApiServiceGenerator;
+import com.christopherluc.popularmovies.api.RetrieveMoviesService;
 import com.christopherluc.popularmovies.data.Constants;
 import com.christopherluc.popularmovies.data.Movie;
 import com.christopherluc.popularmovies.data.MovieListResponse;
@@ -28,21 +29,23 @@ import com.christopherluc.popularmovies.fragment.MovieDetailFragment;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Activity that contains the recyclerview that displays movies
  */
 public class MovieListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    Retrofit retrofit;
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.recyclerview)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout mSwipeRefresh;
+
     private MovieAdapter mMovieAdapter;
-    private SwipeRefreshLayout mSwipeRefresh;
     private String mCurrentPath;
     private boolean mTwoPane;
 
@@ -50,14 +53,13 @@ public class MovieListActivity extends AppCompatActivity implements SwipeRefresh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
+        ButterKnife.bind(this);
         mMovieAdapter = new MovieAdapter(savedInstanceState != null ? savedInstanceState.<Movie>getParcelableArrayList(Constants.EXTRA_MOVIE_LIST) : null);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         mRecyclerView.setAdapter(mMovieAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        mSwipeRefresh = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
         mSwipeRefresh.setOnRefreshListener(this);
-        mCurrentPath = savedInstanceState == null ? Constants.MOVIE_LIST_POPULAR_URL : savedInstanceState.getString(Constants.MOVIE_LIST_RATED_URL);
-        retrofit = new Retrofit.Builder().baseUrl(Constants.MOVIE_LIST_BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        mCurrentPath = savedInstanceState == null ? Constants.MOVIE_LIST_POPULAR_URL : savedInstanceState.getString(Constants.EXTRA_PATH);
+
         if (savedInstanceState == null) {
             onRefresh();
         }
@@ -76,20 +78,30 @@ public class MovieListActivity extends AppCompatActivity implements SwipeRefresh
     @Override
     public void onRefresh() {
         mSwipeRefresh.setRefreshing(true);
-        RetrieveMovies retrieveMovies = retrofit.create(RetrieveMovies.class);
-        Call<MovieListResponse> call = retrieveMovies.getMovies(mCurrentPath, BuildConfig.MOVIE_DATABASE_KEY);
+        makeApiCall();
+        mMovieAdapter.removeAll();
+    }
+
+    private void makeApiCall() {
+        RetrieveMoviesService service = ApiServiceGenerator.createService(RetrieveMoviesService.class);
+        Call<MovieListResponse> call = service.getMovies(mCurrentPath, BuildConfig.MOVIE_DATABASE_KEY);
         call.enqueue(new Callback<MovieListResponse>() {
             @Override
             public void onResponse(Call<MovieListResponse> call, Response<MovieListResponse> response) {
-                mMovieAdapter.addItems(response.body().results);
+                if (response.isSuccessful()) {
+                    mMovieAdapter.addItems(response.body().results);
+                } else {
+                    Toast.makeText(MovieListActivity.this, "Error loading data", Toast.LENGTH_LONG).show();
+                }
+                mSwipeRefresh.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<MovieListResponse> call, Throwable t) {
-                Toast.makeText(MovieListActivity.this, "Error getting data", Toast.LENGTH_LONG).show();
+                Toast.makeText(MovieListActivity.this, "Error loading data", Toast.LENGTH_LONG).show();
+                mSwipeRefresh.setRefreshing(false);
             }
         });
-        mMovieAdapter.removeAll();
     }
 
     @Override
