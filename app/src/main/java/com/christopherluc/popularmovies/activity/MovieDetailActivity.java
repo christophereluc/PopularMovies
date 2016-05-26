@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.christopherluc.popularmovies.R;
-import com.christopherluc.popularmovies.data.Constants;
-import com.christopherluc.popularmovies.data.Movie;
+import com.christopherluc.popularmovies.api.json.Constants;
+import com.christopherluc.popularmovies.api.json.Movie;
 import com.christopherluc.popularmovies.fragment.MovieDetailFragment;
 
 /**

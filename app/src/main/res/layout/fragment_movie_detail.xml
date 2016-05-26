@@ -51,11 +51,20 @@
             android:layout_marginTop="8dp"
             tools:text="Description here"/>
 
+        <Button
+            android:id="@+id/favorite"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description"
+            android:enabled="false"
+            android:text="@string/favorite_button"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/reviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/description"/>
+            android:layout_below="@id/favorite"/>
 
     </RelativeLayout>
 

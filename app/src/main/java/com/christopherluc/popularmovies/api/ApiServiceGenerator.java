@@ -1,6 +1,6 @@
 package com.christopherluc.popularmovies.api;
 
-import com.christopherluc.popularmovies.data.Constants;
+import com.christopherluc.popularmovies.api.json.Constants;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

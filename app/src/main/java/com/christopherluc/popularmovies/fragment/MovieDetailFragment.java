@@ -1,5 +1,6 @@
 package com.christopherluc.popularmovies.fragment;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,12 +19,13 @@ import com.christopherluc.popularmovies.BuildConfig;
 import com.christopherluc.popularmovies.R;
 import com.christopherluc.popularmovies.api.ApiServiceGenerator;
 import com.christopherluc.popularmovies.api.RetrieveMovieDataService;
-import com.christopherluc.popularmovies.data.Constants;
-import com.christopherluc.popularmovies.data.Movie;
-import com.christopherluc.popularmovies.data.Review;
-import com.christopherluc.popularmovies.data.ReviewListResponse;
-import com.christopherluc.popularmovies.data.Video;
-import com.christopherluc.popularmovies.data.VideoListResponse;
+import com.christopherluc.popularmovies.api.json.Constants;
+import com.christopherluc.popularmovies.api.json.Movie;
+import com.christopherluc.popularmovies.api.json.Review;
+import com.christopherluc.popularmovies.api.json.ReviewListResponse;
+import com.christopherluc.popularmovies.api.json.Video;
+import com.christopherluc.popularmovies.api.json.VideoListResponse;
+import com.christopherluc.popularmovies.data.FavoriteMovieContract;
 
 import java.util.ArrayList;
 
@@ -138,6 +140,20 @@ public class MovieDetailFragment extends Fragment {
                 //Do nothing on failure
             }
         });
+    }
+
+    private void onFavoriteClicked() {
+        ContentValues weatherValues = new ContentValues();
+
+        //new AsyncQueryHandler()
+        weatherValues.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_ID, movie.id);
+        weatherValues.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_OVERVIEW, movie.overview);
+        weatherValues.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_POSTER_PATH, movie.poster_path);
+        weatherValues.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_RELEASE_DATE, movie.release_date);
+        weatherValues.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_TITLE, movie.title);
+        weatherValues.put(FavoriteMovieContract.FavoriteMovieEntry.COLUMN_VOTE_AVERAGE, movie.vote_average);
+
+        //getContext().getContentResolver().insert(Weath)
     }
 
     /**

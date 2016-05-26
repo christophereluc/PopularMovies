@@ -1,4 +1,4 @@
-package com.christopherluc.popularmovies.data;
+package com.christopherluc.popularmovies.api.json;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -30,7 +30,7 @@ public class Movie implements Parcelable{
 
     }
 
-    protected Movie(Parcel in) {
+    public Movie(Parcel in) {
         poster_path = in.readString();
         overview = in.readString();
         release_date = in.readString();
@@ -53,5 +53,4 @@ public class Movie implements Parcelable{
         dest.writeDouble(vote_average);
         dest.writeInt(id);
     }
-
 }

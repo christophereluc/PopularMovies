@@ -22,9 +22,9 @@ import com.christopherluc.popularmovies.BuildConfig;
 import com.christopherluc.popularmovies.R;
 import com.christopherluc.popularmovies.api.ApiServiceGenerator;
 import com.christopherluc.popularmovies.api.RetrieveMoviesService;
-import com.christopherluc.popularmovies.data.Constants;
-import com.christopherluc.popularmovies.data.Movie;
-import com.christopherluc.popularmovies.data.MovieListResponse;
+import com.christopherluc.popularmovies.api.json.Constants;
+import com.christopherluc.popularmovies.api.json.Movie;
+import com.christopherluc.popularmovies.api.json.MovieListResponse;
 import com.christopherluc.popularmovies.fragment.MovieDetailFragment;
 
 import java.util.ArrayList;

@@ -6,4 +6,5 @@
     <string name="cd_poster">poster image</string>
     <string name="author_says">%s says:</string>
     <string name="trailer_number">Trailer %s</string>
+    <string name="favorite_button">Favorite This Movie!</string>
 </resources>

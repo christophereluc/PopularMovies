@@ -1,4 +1,4 @@
-package com.christopherluc.popularmovies.data;
+package com.christopherluc.popularmovies.api.json;
 
 import java.util.ArrayList;
 

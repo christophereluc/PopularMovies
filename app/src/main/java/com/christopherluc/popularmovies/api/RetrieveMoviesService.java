@@ -1,7 +1,7 @@
 package com.christopherluc.popularmovies.api;
 
-import com.christopherluc.popularmovies.data.Constants;
-import com.christopherluc.popularmovies.data.MovieListResponse;
+import com.christopherluc.popularmovies.api.json.Constants;
+import com.christopherluc.popularmovies.api.json.MovieListResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
