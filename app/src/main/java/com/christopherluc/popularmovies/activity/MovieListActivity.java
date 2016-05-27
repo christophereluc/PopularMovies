@@ -1,6 +1,7 @@
 package com.christopherluc.popularmovies.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +26,8 @@ import com.christopherluc.popularmovies.api.RetrieveMoviesService;
 import com.christopherluc.popularmovies.api.json.Constants;
 import com.christopherluc.popularmovies.api.json.Movie;
 import com.christopherluc.popularmovies.api.json.MovieListResponse;
+import com.christopherluc.popularmovies.data.FavoriteMovieAsyncQueryHandler;
+import com.christopherluc.popularmovies.data.FavoriteMovieContract;
 import com.christopherluc.popularmovies.fragment.MovieDetailFragment;
 
 import java.util.ArrayList;
@@ -38,8 +41,25 @@ import retrofit2.Response;
 /**
  * Activity that contains the recyclerview that displays movies
  */
-public class MovieListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MovieListActivity extends AppCompatActivity
+        implements SwipeRefreshLayout.OnRefreshListener, FavoriteMovieAsyncQueryHandler.QueryCallback {
 
+    static final int COL_ID = 0;
+    static final int COL_TITLE = 1;
+    static final int COL_RELEASE_DATE = 2;
+    static final int COL_MOVIE_ID = 3;
+    static final int COL_POSTER_PATH = 4;
+    static final int COL_VOTE_AVERAGE = 5;
+    static final int COL_OVERVIEW = 6;
+    private static final String[] MOVIE_COLUMNS = {
+            FavoriteMovieContract.FavoriteMovieEntry.TABLE_NAME + "." + FavoriteMovieContract.FavoriteMovieEntry._ID,
+            FavoriteMovieContract.FavoriteMovieEntry.COLUMN_TITLE,
+            FavoriteMovieContract.FavoriteMovieEntry.COLUMN_RELEASE_DATE,
+            FavoriteMovieContract.FavoriteMovieEntry.COLUMN_MOVIE_ID,
+            FavoriteMovieContract.FavoriteMovieEntry.COLUMN_POSTER_PATH,
+            FavoriteMovieContract.FavoriteMovieEntry.COLUMN_VOTE_AVERAGE,
+            FavoriteMovieContract.FavoriteMovieEntry.COLUMN_OVERVIEW
+    };
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerView;
     @BindView(R.id.refresh_layout)
@@ -78,8 +98,13 @@ public class MovieListActivity extends AppCompatActivity implements SwipeRefresh
     @Override
     public void onRefresh() {
         mSwipeRefresh.setRefreshing(true);
-        makeApiCall();
         mMovieAdapter.removeAll();
+        if (mCurrentPath != null && mCurrentPath.equals(Constants.MOVIE_LIST_FAVORITE)) {
+            retrieveFavorites();
+        }
+        else {
+            makeApiCall();
+        }
     }
 
     private void makeApiCall() {
@@ -123,8 +148,46 @@ public class MovieListActivity extends AppCompatActivity implements SwipeRefresh
                 mCurrentPath = Constants.MOVIE_LIST_RATED_URL;
                 onRefresh();
                 break;
+            case R.id.action_favorites:
+                mCurrentPath = Constants.MOVIE_LIST_FAVORITE;
+                onRefresh();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void retrieveFavorites() {
+        new FavoriteMovieAsyncQueryHandler(getContentResolver(), this)
+                .startQuery(0, null, FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI, MOVIE_COLUMNS, null, null, null);
+    }
+
+    @Override
+    public void onInsertComplete(boolean successful) {
+        //Do nothing
+    }
+
+    @Override
+    public void onDeleteComplete(boolean successful) {
+        //Do nothing
+    }
+
+    @Override
+    public void onQueryComplete(Cursor cursor) {
+        ArrayList<Movie> movieArrayList = new ArrayList<>();
+        if (cursor != null && cursor.moveToPosition(0)) {
+            do {
+                Movie movie = new Movie();
+                movie.id = cursor.getInt(COL_MOVIE_ID);
+                movie.overview = cursor.getString(COL_OVERVIEW);
+                movie.title = cursor.getString(COL_TITLE);
+                movie.poster_path = cursor.getString(COL_POSTER_PATH);
+                movie.vote_average = cursor.getFloat(COL_VOTE_AVERAGE);
+                movie.release_date = cursor.getString(COL_RELEASE_DATE);
+                movieArrayList.add(movie);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        mMovieAdapter.addItems(movieArrayList);
+        mSwipeRefresh.setRefreshing(false);
     }
 
     /**

@@ -10,6 +10,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
+ *
+ * Retrofit interface to retrieve either trailers or reviews for a movie
+ *
  * Created by Chris on 5/24/2016.
  */
 public interface RetrieveMovieDataService {

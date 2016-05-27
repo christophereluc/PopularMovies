@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
+ *
+ * Data contract for a movie in the favorite movies database
+ *
  * Created by Chris on 5/25/2016.
  */
 public class FavoriteMovieContract {

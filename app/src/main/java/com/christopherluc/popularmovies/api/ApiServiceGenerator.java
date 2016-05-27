@@ -7,6 +7,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
+ *
+ * Retrofit generator
+ *
  * Created by Chris on 5/24/2016.
  */
 public class ApiServiceGenerator {

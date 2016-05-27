@@ -8,6 +8,9 @@ import android.net.Uri;
 import java.lang.ref.SoftReference;
 
 /**
+ *
+ * AsyncQueryHandler used to retrieve data from the content provider
+ *
  * Created by Chris on 5/25/2016.
  */
 public class FavoriteMovieAsyncQueryHandler extends AsyncQueryHandler {
@@ -46,7 +49,7 @@ public class FavoriteMovieAsyncQueryHandler extends AsyncQueryHandler {
         }
     }
 
-    interface QueryCallback {
+    public interface QueryCallback {
         void onInsertComplete(boolean successful);
 
         void onDeleteComplete(boolean successful);

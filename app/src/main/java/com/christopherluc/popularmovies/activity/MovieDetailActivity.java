@@ -31,11 +31,6 @@ public class MovieDetailActivity extends AppCompatActivity {
                         .commit();
             }
         }
-        populateUI();
     }
 
-    private void populateUI() {
-        Movie movie = getIntent().getParcelableExtra(Constants.EXTRA_MOVIE);
-        getSupportActionBar().setTitle(movie.title);
-    }
 }

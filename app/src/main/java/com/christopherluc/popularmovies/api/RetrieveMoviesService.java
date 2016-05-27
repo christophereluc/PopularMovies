@@ -9,6 +9,9 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
+ *
+ * Retrofit interface for retrieving movies for a given path
+ *
  * Created by Chris on 5/23/2016.
  */
 public interface RetrieveMoviesService {

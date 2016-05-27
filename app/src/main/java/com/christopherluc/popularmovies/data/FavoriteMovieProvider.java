@@ -1,6 +1,9 @@
 package com.christopherluc.popularmovies.data;
 
 /**
+ *
+ * Content provider for the favorite movies database
+ *
  * Created by Chris on 5/25/2016.
  */
 
